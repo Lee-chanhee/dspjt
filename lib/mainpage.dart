@@ -1,3 +1,4 @@
+import 'package:dsproject1/selling.dart';
 import 'package:flutter/material.dart';
 
 class mainpage extends StatelessWidget {
@@ -99,6 +100,23 @@ class _MyHomePageState extends State<MyHomePage> {
                     "마감임박 공고",
                     "참여 보상이 높은 상위 10개의 공고를 확인해보세요!",
                   ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => selling_page(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 100,
+                      width: 100,
+                      color: Colors.amber,
+                      child: Text("selling"),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -144,36 +162,39 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 Widget mainTitle(String st1, String st2) {
-  return Column(
-    children: [
-      SizedBox(height: 10),
-      Container(
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-        height: 60,
-        color: Colors.amber,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(children: [
-              Icon(Icons.alarm),
-              Text(
-                st1,
-                style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-            ]),
-            Text(st2,
-                style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black)),
-          ],
+  return GestureDetector(
+    onTap: () {},
+    child: Column(
+      children: [
+        SizedBox(height: 10),
+        Container(
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          height: 60,
+          color: Colors.amber,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(children: [
+                Icon(Icons.alarm),
+                Text(
+                  st1,
+                  style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ]),
+              Text(st2,
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black)),
+            ],
+          ),
         ),
-      ),
-      SizedBox(height: 10),
-    ],
+        SizedBox(height: 10),
+      ],
+    ),
   );
 }
 

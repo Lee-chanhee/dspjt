@@ -3,10 +3,8 @@ import 'package:dsproject1/mainpage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'detail_page.dart';
-
-class selling_page extends StatelessWidget {
-  const selling_page({Key? key}) : super(key: key);
+class onboarding_page extends StatelessWidget {
+  const onboarding_page({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +15,7 @@ class selling_page extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => detail_page(),
+              builder: (context) => mainpage(),
             ),
           );
         },
@@ -26,7 +24,7 @@ class selling_page extends StatelessWidget {
           height: 100,
           width: 100,
           color: Colors.amber,
-          child: Text("detail"),
+          child: Text("메인페이지"),
         ),
       ),
     ));
