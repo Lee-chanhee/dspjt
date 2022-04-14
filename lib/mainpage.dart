@@ -1,4 +1,5 @@
 import 'package:dsproject1/detail_page.dart';
+import 'package:dsproject1/request_form.dart';
 import 'package:dsproject1/selling.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -64,6 +65,15 @@ class _main_pageState extends State<main_page> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> _widgetOptions = [
+      mainpage_widget(
+          controller: controller, recommendRequest: recommendRequest),
+      Text('home'),
+      RequestForm(),
+      Placeholder(),
+      Placeholder(),
+    ];
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -74,107 +84,7 @@ class _main_pageState extends State<main_page> with TickerProviderStateMixin {
           ),
           centerTitle: true,
         ),
-        body: ListView(
-          children: [
-            Stack(children: [
-              Container(
-                alignment: Alignment.center,
-                color: Color.fromARGB(112, 227, 89, 89),
-                width: double.infinity,
-                height: 180,
-                child: TabBarView(
-                  controller: controller,
-                  children: [
-                    Image.asset('assets/images/1.jpg', fit: BoxFit.cover),
-                    Image.asset('assets/images/2.jpg', fit: BoxFit.cover),
-                    Image.asset('assets/images/1.jpg', fit: BoxFit.cover),
-                    Image.asset('assets/images/2.jpg', fit: BoxFit.cover),
-                    Image.asset('assets/images/1.jpg', fit: BoxFit.cover),
-                  ],
-                ),
-              ),
-              Positioned(
-                right: 0.0,
-                left: 0.0,
-                bottom: 5,
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.only(bottom: 0),
-                  child: TabPageSelector(
-                    indicatorSize: 8,
-                    controller: controller,
-                    color: Colors.white,
-                    selectedColor: Colors.black,
-                  ),
-                ),
-              )
-            ]),
-            // Container(
-            //   alignment: Alignment.center,
-            //   margin: EdgeInsets.fromLTRB(20, 30, 20, 10),
-            //   decoration: BoxDecoration(
-            //       color: Color.fromARGB(255, 209, 209, 209),
-            //       borderRadius: BorderRadius.circular(10)),
-            //   width: double.infinity,
-            //   height: 45,
-            //   child: TextField(
-            //     decoration: InputDecoration(
-            //         hintText: "Search",
-            //         border: InputBorder.none,
-            //         icon: Padding(
-            //             padding: EdgeInsets.only(left: 13),
-            //             child: Icon(
-            //               Icons.search,
-            //               color: Colors.black,
-            //             ))),
-            //   ),
-            // ),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
-              height: 900,
-              child: Column(
-                children: [
-                  mainTitle(
-                    "리워드 BEST10",
-                    "참여 보상이 높은 상위 10개의 공고를 확인해보세요!",
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  requestTile(recommendRequest: recommendRequest),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  mainTitle(
-                    "마감임박 공고",
-                    "참여 보상이 높은 상위 10개의 공고를 확인해보세요!",
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  requestTile(recommendRequest: recommendRequest),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  mainTitle(
-                    "마감임박 공고",
-                    "참여 보상이 높은 상위 10개의 공고를 확인해보세요!",
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  requestTile(recommendRequest: recommendRequest),
-                  SizedBox(
-                    height: 40,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+        body: _widgetOptions.elementAt(currentIndex),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(),
           clipBehavior: Clip.antiAlias,
@@ -194,7 +104,9 @@ class _main_pageState extends State<main_page> with TickerProviderStateMixin {
               BottomNavigationBarItem(
                   icon: Icon(Icons.home_filled), label: "거래소"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.home_filled), label: "데이터 판매"),
+                icon: Icon(Icons.home_filled),
+                label: "데이터 판매",
+              ),
               BottomNavigationBarItem(
                   icon: Icon(Icons.home_filled), label: "데이터 의뢰"),
               BottomNavigationBarItem(
@@ -210,6 +122,122 @@ class _main_pageState extends State<main_page> with TickerProviderStateMixin {
         //       )
         //     : null,
       ),
+    );
+  }
+}
+
+class mainpage_widget extends StatelessWidget {
+  const mainpage_widget({
+    Key? key,
+    required this.controller,
+    required this.recommendRequest,
+  }) : super(key: key);
+
+  final TabController? controller;
+  final List<Map<String, String>> recommendRequest;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        Stack(children: [
+          Container(
+            alignment: Alignment.center,
+            color: Color.fromARGB(112, 227, 89, 89),
+            width: double.infinity,
+            height: 180,
+            child: TabBarView(
+              controller: controller,
+              children: [
+                Image.asset('assets/images/1.jpg', fit: BoxFit.cover),
+                Image.asset('assets/images/2.jpg', fit: BoxFit.cover),
+                Image.asset('assets/images/1.jpg', fit: BoxFit.cover),
+                Image.asset('assets/images/2.jpg', fit: BoxFit.cover),
+                Image.asset('assets/images/1.jpg', fit: BoxFit.cover),
+              ],
+            ),
+          ),
+          Positioned(
+            right: 0.0,
+            left: 0.0,
+            bottom: 5,
+            child: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(bottom: 0),
+              child: TabPageSelector(
+                indicatorSize: 8,
+                controller: controller,
+                color: Colors.white,
+                selectedColor: Colors.black,
+              ),
+            ),
+          )
+        ]),
+        // Container(
+        //   alignment: Alignment.center,
+        //   margin: EdgeInsets.fromLTRB(20, 30, 20, 10),
+        //   decoration: BoxDecoration(
+        //       color: Color.fromARGB(255, 209, 209, 209),
+        //       borderRadius: BorderRadius.circular(10)),
+        //   width: double.infinity,
+        //   height: 45,
+        //   child: TextField(
+        //     decoration: InputDecoration(
+        //         hintText: "Search",
+        //         border: InputBorder.none,
+        //         icon: Padding(
+        //             padding: EdgeInsets.only(left: 13),
+        //             child: Icon(
+        //               Icons.search,
+        //               color: Colors.black,
+        //             ))),
+        //   ),
+        // ),
+        SizedBox(
+          height: 15,
+        ),
+        Container(
+          margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+          height: 900,
+          child: Column(
+            children: [
+              mainTitle(
+                "리워드 BEST10",
+                "참여 보상이 높은 상위 10개의 공고를 확인해보세요!",
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              requestTile(recommendRequest: recommendRequest),
+              SizedBox(
+                height: 40,
+              ),
+              mainTitle(
+                "마감임박 공고",
+                "참여 보상이 높은 상위 10개의 공고를 확인해보세요!",
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              requestTile(recommendRequest: recommendRequest),
+              SizedBox(
+                height: 40,
+              ),
+              mainTitle(
+                "마감임박 공고",
+                "참여 보상이 높은 상위 10개의 공고를 확인해보세요!",
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              requestTile(recommendRequest: recommendRequest),
+              SizedBox(
+                height: 40,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -436,6 +464,21 @@ Widget mainTitle(String st1, String st2) {
       SizedBox(height: 10),
     ],
   );
+}
+
+class data_request {
+  String type = '';
+  String name = '';
+  String reward = '';
+  String left = '';
+  String number = '';
+  data_request(
+    this.type,
+    this.name,
+    this.reward,
+    this.left,
+    this.number,
+  ); // 생성자
 }
 
 class AlbumCard extends StatelessWidget {
