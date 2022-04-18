@@ -1,4 +1,5 @@
 import 'package:dsproject1/detail_page.dart';
+import 'package:dsproject1/purchase_sv.dart';
 import 'package:dsproject1/request_form.dart';
 import 'package:dsproject1/selling.dart';
 import 'package:flutter/material.dart';
@@ -68,10 +69,9 @@ class _main_pageState extends State<main_page> with TickerProviderStateMixin {
     List<Widget> _widgetOptions = [
       mainpage_widget(
           controller: controller, recommendRequest: recommendRequest),
-      Text('home'),
+      purchasePage(),
       RequestForm(),
-      Placeholder(),
-      Placeholder(),
+      purchasePage(),
     ];
 
     return SafeArea(
