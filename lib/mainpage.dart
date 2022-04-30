@@ -80,7 +80,7 @@ class _main_pageState extends State<main_page> with TickerProviderStateMixin {
       purchasePage(),
     ];
 
-    return Consumer<dataservice>(builder: (context, dataservice, child) {
+    return Consumer<dataService>(builder: (context, dataservice, child) {
       return SafeArea(
         child: Scaffold(
           body: _widgetOptions.elementAt(currentIndex),
