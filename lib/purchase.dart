@@ -1,7 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:dsproject1/purchase_feed_sv.dart';
+import 'package:dsproject1/purchase_feed.dart';
 
 class purchasePage extends StatefulWidget {
   const purchasePage({Key? key}) : super(key: key);
@@ -27,14 +27,14 @@ class _purchasePageState extends State<purchasePage> {
   Widget build(BuildContext context) {
     // 화면에 보이는 영역
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Colors.black,
-      //   title: Text(
-      //     "DATA STORE",
-      //     style: TextStyle(fontWeight: FontWeight.bold),
-      //   ),
-      //   centerTitle: true,
-      // ),
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: Text(
+          "DATA STORE",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
       body: Column(
         children: [
           /// 검색

@@ -17,7 +17,16 @@ class RequestForm extends StatefulWidget {
 }
 
 class Request_Form extends State<RequestForm> {
-  final formKey = GlobalKey<FormState>();
+  TextEditingController controller_title = TextEditingController();
+  TextEditingController controller_startdate = TextEditingController();
+  TextEditingController controller_duedate = TextEditingController();
+  TextEditingController controller_info = TextEditingController();
+  TextEditingController controller_condition_title = TextEditingController();
+  TextEditingController controller_condition_info = TextEditingController();
+  TextEditingController controller_file_condition = TextEditingController();
+  TextEditingController controller_file_quantity = TextEditingController();
+  TextEditingController controller_reward = TextEditingController();
+  bool autovalidate = false;
 
   List<String> filetype = [
     'JPEG',
@@ -26,18 +35,38 @@ class Request_Form extends State<RequestForm> {
     'csv',
   ];
   String _selectedtype = 'JPEG';
+  Map<String, dynamic> data_request = {
+    'title': Null,
+    'category': Null,
+    'start_date': Null,
+    'due_date': Null,
+    'photo': Null,
+    'request_info': Null,
+    'conditions': Null,
+    'file_types': Null,
+    'reward': Null,
+  };
 
+  bool cate1 = true;
+  bool cate2 = false;
+  bool cate3 = false;
+  late List<bool> category_list = [cate1, cate2, cate3];
+  List<String> category_name = ['cate1', 'cate2', 'cate3'];
   String category = '';
   String title = '';
   String start_date = '';
   String due_date = '';
   String photo = '';
   String request_info = '';
+  List conditions = [];
   String condition_title = '';
   String condition_info = '';
+  List file_types = [];
   String file_type = '';
   String file_info = '';
+  String file_quantity = '';
   String reward = '';
+  int condition_number = 1;
 
   PickedFile? imageFile = null;
   Future<void> _showChoiceDialog(BuildContext context) {
@@ -88,6 +117,82 @@ class Request_Form extends State<RequestForm> {
     );
   }
 
+////////// 데이터 모집 시작시기 입력 //////////
+
+  yearMonthDayTimePicker1() async {
+    final year = DateTime.now().year;
+    String hour, min;
+    final DateTime? dateTime = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(year),
+      lastDate: DateTime(year + 10),
+    );
+
+    if (dateTime != null) {
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay(hour: 0, minute: 0),
+      );
+
+      if (pickedTime != null) {
+        if (pickedTime.hour < 10) {
+          hour = '0' + pickedTime.hour.toString();
+        } else {
+          hour = pickedTime.hour.toString();
+        }
+
+        if (pickedTime.minute < 10) {
+          min = '0' + pickedTime.minute.toString();
+        } else {
+          min = pickedTime.minute.toString();
+        }
+
+        controller_startdate.text =
+            '${dateTime.toString().split(' ')[0]}, $hour:$min';
+      }
+    }
+  }
+
+////////// 데이터 모집 종료시기 입력 //////////
+  ///
+  yearMonthDayTimePicker2() async {
+    final year = DateTime.now().year;
+    String hour, min;
+    final DateTime? dateTime = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(year),
+      lastDate: DateTime(year + 10),
+    );
+
+    if (dateTime != null) {
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay(hour: 0, minute: 0),
+      );
+
+      if (pickedTime != null) {
+        if (pickedTime.hour < 10) {
+          hour = '0' + pickedTime.hour.toString();
+        } else {
+          hour = pickedTime.hour.toString();
+        }
+
+        if (pickedTime.minute < 10) {
+          min = '0' + pickedTime.minute.toString();
+        } else {
+          min = pickedTime.minute.toString();
+        }
+
+        controller_duedate.text =
+            '${dateTime.toString().split(' ')[0]}, $hour:$min';
+      }
+    }
+  }
+
+  ////////// 저장값 출력 //////////
+
   @override
   Widget build(BuildContext context) {
     renderValues() {
@@ -119,39 +224,123 @@ class Request_Form extends State<RequestForm> {
       );
     }
 
+////////// 데이터 모집 종료시기 입력 //////////
+
     // TODO: implement build
     return Scaffold(
-      body: Form(
-        key: this.formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: Text(
+          "DATA STORE",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        actions: [
+          GestureDetector(
+            onTap: () {
+              data_request = {
+                'title': controller_title.text,
+                'category': category,
+                'start_date': controller_startdate.text,
+                'due_date': controller_duedate.text,
+                'photo': photo,
+                'request_info': controller_info.text,
+                'conditions': conditions,
+                'file_types': file_types,
+                'reward': controller_reward.text,
+              };
+              print(data_request);
+            },
+            child: Center(
+              child: Text(
+                "제출",
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 12,
+          )
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Expanded(
           child: ListView(children: [
+            RequestForm_title(title_text: "데이터 수집 이름"),
+            SizedBox(height: 20),
+            request_TextField(
+              controller: controller_title,
+              form_maxline: 1,
+              form_height: 70,
+              form_hint: "데이터 수집 이름",
+              // validator: (val) {
+              //   return null;
+              // },
+            ),
+            SizedBox(height: 20),
             RequestForm_title(title_text: "데이터 모집 형식"),
             SizedBox(height: 20),
-            TextForm_Field(
-              form_maxline: 1,
-              form_height: 70,
-              form_hint: "제목",
-              onSaved: (val) {
+            ToggleButtons(
+              children: [
+                Container(
+                    height: 40,
+                    width: 120,
+                    child: Center(
+                      child: Text(
+                        "Cate1",
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    )),
+                Container(
+                    height: 40,
+                    width: 120,
+                    child: Center(
+                      child: Text(
+                        "Cate2",
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    )),
+                Container(
+                    height: 40,
+                    width: 120,
+                    child: Center(
+                      child: Text(
+                        "Cate3",
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    )),
+              ],
+              isSelected: category_list,
+              onPressed: (value) {
+                if (value == 0) {
+                  cate1 = true;
+                  cate2 = false;
+                  cate3 = false;
+                }
+                if (value == 1) {
+                  cate1 = false;
+                  cate2 = true;
+                  cate3 = false;
+                }
+                if (value == 2) {
+                  cate1 = false;
+                  cate2 = false;
+                  cate3 = true;
+                }
                 setState(() {
-                  this.title = val;
+                  category_list = [cate1, cate2, cate3];
+                  if (cate1 == true) {
+                    category = category_name[0];
+                  }
+                  if (cate2 == true) {
+                    category = category_name[1];
+                  }
+                  if (cate3 == true) {
+                    category = category_name[2];
+                  }
+                  print(category);
                 });
-              },
-              validator: (val) {
-                return null;
-              },
-            ),
-            TextForm_Field(
-              form_maxline: 1,
-              form_height: 70,
-              form_hint: "제목",
-              onSaved: (val) {
-                setState(() {
-                  this.title = val;
-                });
-              },
-              validator: (val) {
-                return null;
               },
             ),
             SizedBox(height: 40),
@@ -159,32 +348,75 @@ class Request_Form extends State<RequestForm> {
             SizedBox(height: 20),
             Row(
               children: [
-                Expanded(
-                    flex: 1,
-                    child: TextForm_Field(
-                      form_maxline: 1,
-                      form_height: 70,
-                      form_hint: "YYYY",
-                      onSaved: (val) {},
-                      validator: (val) {
-                        return null;
-                      },
-                    )),
+                Text(
+                  "시작일 :",
+                  style: TextStyle(fontSize: 18),
+                ),
+                Spacer(),
+                Container(
+                  width: 300,
+                  child: GestureDetector(
+                    onTap: yearMonthDayTimePicker1,
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: controller_startdate,
+                        decoration: InputDecoration(
+                          // labelText: "Pick year, month, date, time",
+                          border: OutlineInputBorder(),
+                          filled: true,
+                        ),
+                        onSaved: (val) {
+                          setState(() {
+                            this.start_date = controller_startdate.text;
+                          });
+                        },
+                        validator: (val) {
+                          if (val == null || val.isEmpty) {
+                            return 'value is empty';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
+            SizedBox(height: 10),
             Row(
               children: [
-                Expanded(
-                    flex: 1,
-                    child: TextForm_Field(
-                      form_maxline: 1,
-                      form_height: 70,
-                      form_hint: "YYYY",
-                      onSaved: (val) {},
-                      validator: (val) {
-                        return null;
-                      },
-                    )),
+                Text(
+                  "종료일 :",
+                  style: TextStyle(fontSize: 18),
+                ),
+                Spacer(),
+                Container(
+                  width: 300,
+                  child: GestureDetector(
+                    onTap: yearMonthDayTimePicker2,
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: controller_duedate,
+                        decoration: InputDecoration(
+                          // labelText: "Pick year, month, date, time",
+                          border: OutlineInputBorder(),
+                          filled: true,
+                        ),
+                        onSaved: (val) {
+                          setState(() {
+                            this.due_date = controller_duedate.text;
+                          });
+                        },
+                        validator: (val) {
+                          if (val == null || val.isEmpty) {
+                            return 'value is empty';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
             SizedBox(height: 40),
@@ -215,54 +447,103 @@ class Request_Form extends State<RequestForm> {
             SizedBox(
               height: 10,
             ),
-            TextForm_Field(
+            request_TextField(
+              controller: controller_info,
               form_maxline: 10,
               form_height: 240,
               form_hint: "수집을 원하시는 데이터에 대한 상세 설명을 기입해주세요",
-              onSaved: (val) {
-                setState(() {
-                  this.request_info = val;
-                });
-              },
-              validator: (val) {
-                return null;
-              },
+              // validator: (val) {
+              //   return null;
+              // },
             ),
             SizedBox(height: 40),
             RequestForm_title(title_text: "조건"),
             SizedBox(height: 20),
-            TextForm_Field(
+            for (List condition in conditions)
+              Row(
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: Container(
+                      // padding: EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            height: 50,
+                            child: Text(condition[0]),
+                          ),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            height: 50,
+                            child: Text(condition[1]),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(flex: 1, child: Container()),
+                  Expanded(
+                    flex: 1,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          conditions.remove(condition);
+                        });
+                      },
+                      child: Container(
+                        height: 30,
+                        color: Colors.blue,
+                        width: 30,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            SizedBox(height: 20),
+            request_TextField(
+              controller: controller_condition_title,
               form_maxline: 1,
               form_height: 70,
               form_hint: "조건명",
-              onSaved: (val) {
-                setState(() {
-                  this.condition_title = val;
-                });
-              },
-              validator: (val) {
-                return null;
-              },
+              // validator: (val) {
+              //   return null;
+              // },
             ),
             SizedBox(height: 20),
-            TextForm_Field(
+            request_TextField(
+              controller: controller_condition_info,
               form_maxline: 3,
               form_height: 100,
               form_hint: "데이터 모집 조건에 대한 상세 설명을 입력해주세요",
-              onSaved: (val) {
+              // validator: (val) {
+              //   return null;
+              // },
+            ),
+            SizedBox(height: 40),
+            GestureDetector(
+              onTap: () {
                 setState(() {
-                  this.condition_info = val;
+                  conditions.add([
+                    controller_condition_title.text,
+                    controller_condition_info.text
+                  ]);
+                  controller_condition_title.clear();
+                  controller_condition_info.clear();
+                  print(conditions);
                 });
               },
-              validator: (val) {
-                return null;
-              },
+              child: Container(
+                height: 50,
+                color: Colors.amber,
+                child: Center(child: Text("조건 추가")),
+              ),
             ),
             SizedBox(height: 40),
             RequestForm_title(title_text: "파일형식"),
             SizedBox(height: 10),
             Container(
-              height: 100,
+              height: 80,
               width: double.infinity,
               child: Column(
                 children: [
@@ -295,20 +576,30 @@ class Request_Form extends State<RequestForm> {
                       ),
                       Spacer(),
                       Container(
-                        width: 290,
+                        width: 190,
                         height: 50,
-                        child: TextForm_Field(
+                        child: request_TextField(
+                          controller: controller_file_condition,
                           form_maxline: 1,
                           form_height: 100,
-                          form_hint: "조건을 입력하세요",
-                          onSaved: (val) {
-                            setState(() {
-                              this.file_info = val;
-                            });
-                          },
-                          validator: (val) {
-                            return null;
-                          },
+                          form_hint: "조건",
+                          // validator: (val) {
+                          //   return null;
+                          // },
+                        ),
+                      ),
+                      Spacer(),
+                      Container(
+                        width: 100,
+                        height: 50,
+                        child: request_TextField(
+                          controller: controller_file_quantity,
+                          form_maxline: 1,
+                          form_height: 100,
+                          form_hint: "수량",
+                          // validator: (val) {
+                          //   return null;
+                          // },
                         ),
                       )
                     ],
@@ -316,18 +607,86 @@ class Request_Form extends State<RequestForm> {
                 ],
               ),
             ),
-            SizedBox(height: 50),
+            for (List file_type in file_types)
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      height: 50,
+                      child: Text(file_type[0]),
+                    ),
+                  ),
+                  Expanded(flex: 1, child: Container()),
+                  Expanded(
+                    flex: 4,
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      height: 50,
+                      child: Text(file_type[1]),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      height: 50,
+                      child: Text(file_type[1]),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          file_types.remove(file_type);
+                        });
+                      },
+                      child: Container(
+                        height: 30,
+                        color: Colors.blue,
+                        width: 30,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            SizedBox(height: 2),
             GestureDetector(
               onTap: () {
-                this.formKey.currentState!.save();
+                setState(() {
+                  file_types.add([
+                    _selectedtype,
+                    controller_file_condition.text,
+                    controller_file_quantity.text,
+                  ]);
+                  _selectedtype = 'JPEG';
+                  controller_file_condition.clear();
+                  controller_file_quantity.clear();
+                });
               },
               child: Container(
                 height: 50,
                 color: Colors.amber,
-                child: Center(child: Text("제출")),
+                child: Center(child: Text("파일형식 추가")),
               ),
             ),
-            renderValues(),
+            SizedBox(
+              height: 20,
+            ),
+            RequestForm_title(title_text: "총 보상금액"),
+            SizedBox(height: 20),
+            request_TextField(
+              controller: controller_reward,
+              form_maxline: 1,
+              form_height: 70,
+              form_hint: "총 보상금액",
+              // validator: (val) {
+              //   return null;
+              // },
+            ),
+            // renderValues(),
           ]),
         ),
       ),
@@ -356,15 +715,16 @@ class Request_Form extends State<RequestForm> {
   }
 }
 
-TextForm_Field(
-    {required int form_maxline,
-    required double form_height,
-    required String form_hint,
-    required FormFieldSetter onSaved,
-    required FormFieldValidator validator}) {
+request_TextField({
+  // required Function sendMsg,
+  required TextEditingController controller,
+  required int form_maxline,
+  required double form_height,
+  required String form_hint,
+  // required FormFieldSetter onSaved,
+  // required FormFieldValidator validator
+}) {
   // assert(label != null);
-  assert(onSaved != null);
-  assert(validator != null);
 
   return Container(
     alignment: Alignment.center,
@@ -377,8 +737,8 @@ TextForm_Field(
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 5, 10, 5),
-            child: TextFormField(
-              onSaved: onSaved,
+            child: TextField(
+              controller: controller,
               maxLines: form_maxline,
               textAlign: TextAlign.start,
               decoration: InputDecoration(
@@ -404,113 +764,3 @@ RequestForm_title({required String title_text}) {
     ),
   );
 }
-
-// RequestForm_filetype() {String? selectedValue;
-// List<String> items = [
-//     'Item1',
-//     'Item2',
-//     'Item3',
-//     'Item4',
-//     'Item5',
-//     'Item6',
-//     'Item7',
-//     'Item8',
-//   ];
-
-//   return Container(
-//     child: Row(
-//       children: [
-//        DropdownButtonHideUnderline(
-//           child: DropdownButton2(
-//             isExpanded: true,
-//             hint: Row(
-//               children: const [
-//                 Icon(
-//                   Icons.list,
-//                   size: 16,
-//                   color: Colors.yellow,
-//                 ),
-//                 SizedBox(
-//                   width: 4,
-//                 ),
-//                 Expanded(
-//                   child: Text(
-//                     'Select Item',
-//                     style: TextStyle(
-//                       fontSize: 14,
-//                       fontWeight: FontWeight.bold,
-//                       color: Colors.yellow,
-//                     ),
-//                     overflow: TextOverflow.ellipsis,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//             items: items
-//                 .map((item) => DropdownMenuItem<String>(
-//                       value: item,
-//                       child: Text(
-//                         item,
-//                         style: const TextStyle(
-//                           fontSize: 14,
-//                           fontWeight: FontWeight.bold,
-//                           color: Colors.white,
-//                         ),
-//                         overflow: TextOverflow.ellipsis,
-//                       ),
-//                     ))
-//                 .toList(),
-//             value: selectedValue,
-//             onChanged: (value) {
-//               setState(() {
-//                 selectedValue = value as String;
-//               });
-//             },
-//             icon: const Icon(
-//               Icons.arrow_forward_ios_outlined,
-//             ),
-//             iconSize: 14,
-//             iconEnabledColor: Colors.yellow,
-//             iconDisabledColor: Colors.grey,
-//             buttonHeight: 50,
-//             buttonWidth: 160,
-//             buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-//             buttonDecoration: BoxDecoration(
-//               borderRadius: BorderRadius.circular(14),
-//               border: Border.all(
-//                 color: Colors.black26,
-//               ),
-//               color: Colors.redAccent,
-//             ),
-//             buttonElevation: 2,
-//             itemHeight: 40,
-//             itemPadding: const EdgeInsets.only(left: 14, right: 14),
-//             dropdownMaxHeight: 200,
-//             dropdownWidth: 200,
-//             dropdownPadding: null,
-//             dropdownDecoration: BoxDecoration(
-//               borderRadius: BorderRadius.circular(14),
-//               color: Colors.redAccent,
-//             ),
-//             dropdownElevation: 8,
-//             scrollbarRadius: const Radius.circular(40),
-//             scrollbarThickness: 6,
-//             scrollbarAlwaysShow: true,
-//             offset: const Offset(-20, 0),
-//           ),
-//         ),
-//         ],
-//     ),
-//   )
-//   );
-// }
-
-// renderValues() {
-//   return Column(
-//     children: [
-//       Text('name: $name'),
-//       Text('career: $career'),
-//       ),
-//     ],
-//   );
-// }

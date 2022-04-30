@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1041694029772",
+    "project_id": "dsproject-a31d7",
+    "storage_bucket": "dsproject-a31d7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1041694029772:android:4bb99732f9401514450f69",
+        "android_client_info": {
+          "package_name": "com.dsds.dsproject1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1041694029772-0qvovj954vmglla5jiejb5e71hvs92o3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYvseLuH_e1afaFEbuuZEHqbrsk2is7ek"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1041694029772-0qvovj954vmglla5jiejb5e71hvs92o3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

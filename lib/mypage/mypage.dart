@@ -1,4 +1,4 @@
-import 'package:dsproject1/login.dart';
+import 'package:dsproject1/loginpage.dart';
 import 'package:dsproject1/mainpage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ class mypage extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => login_page(),
+              builder: (context) => LoginPage(),
             ),
           );
         },

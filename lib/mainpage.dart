@@ -1,9 +1,15 @@
+import 'package:dsproject1/dataservice.dart';
 import 'package:dsproject1/detail_page.dart';
-import 'package:dsproject1/purchase_sv.dart';
+import 'package:dsproject1/purchase.dart';
 import 'package:dsproject1/request_form.dart';
 import 'package:dsproject1/selling.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
+
+import 'auth_service.dart';
+import 'loginpage.dart';
 
 class main_page extends StatefulWidget {
   const main_page({Key? key}) : super(key: key);
@@ -74,55 +80,49 @@ class _main_pageState extends State<main_page> with TickerProviderStateMixin {
       purchasePage(),
     ];
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          title: Text(
-            "DATA STORE",
-            style: TextStyle(fontWeight: FontWeight.bold),
+    return Consumer<dataservice>(builder: (context, dataservice, child) {
+      return SafeArea(
+        child: Scaffold(
+          body: _widgetOptions.elementAt(currentIndex),
+          bottomNavigationBar: Container(
+            decoration: BoxDecoration(),
+            clipBehavior: Clip.antiAlias,
+            child: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: Colors.black,
+              currentIndex: currentIndex,
+              onTap: (int newIndex) {
+                setState(() {
+                  currentIndex = newIndex;
+                });
+              },
+              iconSize: 24,
+              unselectedItemColor: Colors.grey,
+              selectedItemColor: Colors.white,
+              items: [
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.home_filled), label: "거래소"),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_filled),
+                  label: "데이터 판매",
+                ),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.home_filled), label: "데이터 의뢰"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.home_filled), label: "마이페이지"),
+              ],
+            ),
           ),
-          centerTitle: true,
+          // floatingActionButton: currentIndex == 0
+          //     ? FloatingActionButton(
+          //         backgroundColor: Colors.amber,
+          //         onPressed: () {},
+          //         child: Icon(Icons.plus_one),
+          //       )
+          //     : null,
         ),
-        body: _widgetOptions.elementAt(currentIndex),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(),
-          clipBehavior: Clip.antiAlias,
-          child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.black,
-            currentIndex: currentIndex,
-            onTap: (int newIndex) {
-              setState(() {
-                currentIndex = newIndex;
-              });
-            },
-            iconSize: 24,
-            unselectedItemColor: Colors.grey,
-            selectedItemColor: Colors.white,
-            items: [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home_filled), label: "거래소"),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_filled),
-                label: "데이터 판매",
-              ),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home_filled), label: "데이터 의뢰"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home_filled), label: "마이페이지"),
-            ],
-          ),
-        ),
-        // floatingActionButton: currentIndex == 0
-        //     ? FloatingActionButton(
-        //         backgroundColor: Colors.amber,
-        //         onPressed: () {},
-        //         child: Icon(Icons.plus_one),
-        //       )
-        //     : null,
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -138,106 +138,136 @@ class mainpage_widget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Stack(children: [
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: Text(
+          "DATA STORE",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          IconButton(
+              icon: Icon(
+                CupertinoIcons.bell_solid,
+                size: 26.0,
+                color: Colors.white,
+              ),
+              onPressed: () {}),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () async {
+                AuthService().signOut();
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginPage()));
+              },
+              child: Center(child: Text("logout")),
+            ),
+          )
+        ],
+        centerTitle: true,
+      ),
+      body: ListView(
+        children: [
+          Stack(children: [
+            Container(
+              alignment: Alignment.center,
+              color: Color.fromARGB(112, 227, 89, 89),
+              width: double.infinity,
+              height: 180,
+              child: TabBarView(
+                controller: controller,
+                children: [
+                  Image.asset('assets/images/1.jpg', fit: BoxFit.cover),
+                  Image.asset('assets/images/2.jpg', fit: BoxFit.cover),
+                  Image.asset('assets/images/1.jpg', fit: BoxFit.cover),
+                  Image.asset('assets/images/2.jpg', fit: BoxFit.cover),
+                  Image.asset('assets/images/1.jpg', fit: BoxFit.cover),
+                ],
+              ),
+            ),
+            Positioned(
+              right: 0.0,
+              left: 0.0,
+              bottom: 5,
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(bottom: 0),
+                child: TabPageSelector(
+                  indicatorSize: 8,
+                  controller: controller,
+                  color: Colors.white,
+                  selectedColor: Colors.black,
+                ),
+              ),
+            )
+          ]),
+          // Container(
+          //   alignment: Alignment.center,
+          //   margin: EdgeInsets.fromLTRB(20, 30, 20, 10),
+          //   decoration: BoxDecoration(
+          //       color: Color.fromARGB(255, 209, 209, 209),
+          //       borderRadius: BorderRadius.circular(10)),
+          //   width: double.infinity,
+          //   height: 45,
+          //   child: TextField(
+          //     decoration: InputDecoration(
+          //         hintText: "Search",
+          //         border: InputBorder.none,
+          //         icon: Padding(
+          //             padding: EdgeInsets.only(left: 13),
+          //             child: Icon(
+          //               Icons.search,
+          //               color: Colors.black,
+          //             ))),
+          //   ),
+          // ),
+          SizedBox(
+            height: 15,
+          ),
           Container(
-            alignment: Alignment.center,
-            color: Color.fromARGB(112, 227, 89, 89),
-            width: double.infinity,
-            height: 180,
-            child: TabBarView(
-              controller: controller,
+            margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
+            height: 900,
+            child: Column(
               children: [
-                Image.asset('assets/images/1.jpg', fit: BoxFit.cover),
-                Image.asset('assets/images/2.jpg', fit: BoxFit.cover),
-                Image.asset('assets/images/1.jpg', fit: BoxFit.cover),
-                Image.asset('assets/images/2.jpg', fit: BoxFit.cover),
-                Image.asset('assets/images/1.jpg', fit: BoxFit.cover),
+                mainTitle(
+                  "리워드 BEST10",
+                  "참여 보상이 높은 상위 10개의 공고를 확인해보세요!",
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                requestTile(recommendRequest: recommendRequest),
+                SizedBox(
+                  height: 40,
+                ),
+                mainTitle(
+                  "마감임박 공고",
+                  "참여 보상이 높은 상위 10개의 공고를 확인해보세요!",
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                requestTile(recommendRequest: recommendRequest),
+                SizedBox(
+                  height: 40,
+                ),
+                mainTitle(
+                  "마감임박 공고",
+                  "참여 보상이 높은 상위 10개의 공고를 확인해보세요!",
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                requestTile(recommendRequest: recommendRequest),
+                SizedBox(
+                  height: 40,
+                ),
               ],
             ),
           ),
-          Positioned(
-            right: 0.0,
-            left: 0.0,
-            bottom: 5,
-            child: Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(bottom: 0),
-              child: TabPageSelector(
-                indicatorSize: 8,
-                controller: controller,
-                color: Colors.white,
-                selectedColor: Colors.black,
-              ),
-            ),
-          )
-        ]),
-        // Container(
-        //   alignment: Alignment.center,
-        //   margin: EdgeInsets.fromLTRB(20, 30, 20, 10),
-        //   decoration: BoxDecoration(
-        //       color: Color.fromARGB(255, 209, 209, 209),
-        //       borderRadius: BorderRadius.circular(10)),
-        //   width: double.infinity,
-        //   height: 45,
-        //   child: TextField(
-        //     decoration: InputDecoration(
-        //         hintText: "Search",
-        //         border: InputBorder.none,
-        //         icon: Padding(
-        //             padding: EdgeInsets.only(left: 13),
-        //             child: Icon(
-        //               Icons.search,
-        //               color: Colors.black,
-        //             ))),
-        //   ),
-        // ),
-        SizedBox(
-          height: 15,
-        ),
-        Container(
-          margin: EdgeInsets.fromLTRB(20, 10, 20, 0),
-          height: 900,
-          child: Column(
-            children: [
-              mainTitle(
-                "리워드 BEST10",
-                "참여 보상이 높은 상위 10개의 공고를 확인해보세요!",
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              requestTile(recommendRequest: recommendRequest),
-              SizedBox(
-                height: 40,
-              ),
-              mainTitle(
-                "마감임박 공고",
-                "참여 보상이 높은 상위 10개의 공고를 확인해보세요!",
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              requestTile(recommendRequest: recommendRequest),
-              SizedBox(
-                height: 40,
-              ),
-              mainTitle(
-                "마감임박 공고",
-                "참여 보상이 높은 상위 10개의 공고를 확인해보세요!",
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              requestTile(recommendRequest: recommendRequest),
-              SizedBox(
-                height: 40,
-              ),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -515,3 +545,13 @@ class AlbumCard extends StatelessWidget {
     );
   }
 }
+
+// yearMonthDayPicker() async {
+//   final year = DateTime.now().year;
+//   final DateTime? dateTime = await showDatePicker(
+//     context: context,
+//     initialDate: DateTime.now(),
+//     firstDate: DateTime(year),
+//     lastDate: DateTime.now(year + 10),
+//   );
+// }
