@@ -3,6 +3,8 @@ import 'package:dsproject1/mainpage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'main.dart';
 
 class onboarding_page extends StatelessWidget {
   const onboarding_page({Key? key}) : super(key: key);
@@ -100,7 +102,8 @@ class onboarding_page extends StatelessWidget {
       done: Text("Start Now", style: TextStyle(fontWeight: FontWeight.w600)),
       onDone: () {
         //When done button is press
-        Navigator.push(
+        prefs.setBool("isOnboarded", true);
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => main_page()),
         );
