@@ -3,6 +3,7 @@ import 'package:dsproject1/detail_page.dart';
 import 'package:dsproject1/purchase.dart';
 import 'package:dsproject1/request_form.dart';
 import 'package:dsproject1/selling.dart';
+import 'package:dsproject1/mypage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -77,7 +78,7 @@ class _main_pageState extends State<main_page> with TickerProviderStateMixin {
           controller: controller, recommendRequest: recommendRequest),
       purchasePage(),
       RequestForm(),
-      purchasePage(),
+      mypage(),
     ];
 
     return Consumer<dataService>(builder: (context, dataservice, child) {
