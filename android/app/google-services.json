@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "925765187596",
+    "project_id": "datastoreproject-a2e93",
+    "storage_bucket": "datastoreproject-a2e93.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:925765187596:android:fb6d47f267be3d97f39629",
+        "android_client_info": {
+          "package_name": "com.final.dsproject1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "925765187596-et01e85vk2ac3i3qcarsja2btsodh77d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMisNk9EtTs9wIRVsr5Pbdm2XtXye-ue0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "925765187596-et01e85vk2ac3i3qcarsja2btsodh77d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
