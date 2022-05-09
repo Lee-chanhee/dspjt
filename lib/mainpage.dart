@@ -44,7 +44,8 @@ class _main_pageState extends State<main_page> with TickerProviderStateMixin {
       purchasePage(),
     ];
 
-    return Consumer<dataService>(builder: (context, dataservice, child) {
+    return Consumer<dataService_request>(
+        builder: (context, dataservice, child) {
       return SafeArea(
         child: Scaffold(
           body: _widgetOptions.elementAt(currentIndex),
@@ -108,83 +109,6 @@ class _mainpage_widgetState extends State<mainpage_widget> {
     final user = authService.currentUser()!;
 
     //////////////////// 샘플데이터////////////////////////////////////
-    final List<Map<String, dynamic>> recommendRequest = const [
-      {
-        'uid': 'bQ1jfQDWr3gl3pMChmNatMWrRjK2',
-        'title': 'test1',
-        'category': 'test',
-        'start_date': '2022-05-05, 00:00',
-        'due_date': '2022-05-12, 05:00',
-        'photo': "",
-        'request_info': "test test test",
-        'condition_title': ['condition1', 'condition2'],
-        'condition_info': ['condition1 info', 'condition2 info'],
-        'file_type': ['jPG', 'csv'],
-        'file_info': ['test', 'test2'],
-        'file_quantity': ['123', '231'],
-        'reward': '1231412413',
-      },
-      {
-        'uid': 'bQ1jfQDWr3gl3pMChmNatMWrRjK2',
-        'title': 'test2',
-        'category': 'test',
-        'start_date': '2022-05-05, 00:00',
-        'due_date': '2022-05-12, 05:00',
-        'photo': "",
-        'request_info': "test test test",
-        'condition_title': ['condition1', 'condition2'],
-        'condition_info': ['condition1 info', 'condition2 info'],
-        'file_type': ['jPG', 'csv'],
-        'file_info': ['test', 'test2'],
-        'file_quantity': ['123', '231'],
-        'reward': '1231412413',
-      },
-      {
-        'uid': 'bQ1jfQDWr3gl3pMChmNatMWrRjK2',
-        'title': 'test3',
-        'category': 'test',
-        'start_date': '2022-05-05, 00:00',
-        'due_date': '2022-05-12, 05:00',
-        'photo': "",
-        'request_info': "test test test",
-        'condition_title': ['condition1', 'condition2'],
-        'condition_info': ['condition1 info', 'condition2 info'],
-        'file_type': ['jPG', 'csv'],
-        'file_info': ['test', 'test2'],
-        'file_quantity': ['123', '231'],
-        'reward': '1231412413',
-      },
-      {
-        'uid': 'bQ1jfQDWr3gl3pMChmNatMWrRjK2',
-        'title': 'test4',
-        'category': 'test',
-        'start_date': '2022-05-05, 00:00',
-        'due_date': '2022-05-12, 05:00',
-        'photo': "",
-        'request_info': "test test test",
-        'condition_title': ['condition1', 'condition2'],
-        'condition_info': ['condition1 info', 'condition2 info'],
-        'file_type': ['jPG', 'csv'],
-        'file_info': ['test', 'test2'],
-        'file_quantity': ['123', '231'],
-        'reward': '1231412413',
-      },
-      {
-        'uid': 'bQ1jfQDWr3gl3pMChmNatMWrRjK2',
-        'title': 'test5',
-        'category': 'test',
-        'start_date': '2022-05-05, 00:00',
-        'due_date': '2022-05-12, 05:00',
-        'photo': "",
-        'request_info': "test test test",
-        'condition_title': ['condition1', 'condition2'],
-        'condition_info': ['condition1 info', 'condition2 info'],
-        'file_type': ['jPG', 'csv'],
-        'file_info': ['test', 'test2'],
-        'file_quantity': ['123', '231'],
-        'reward': '1231412413',
-      },
-    ];
 
     final List<Map<String, dynamic>> sellingData = const [
       {
@@ -235,11 +159,11 @@ class _mainpage_widgetState extends State<mainpage_widget> {
     ];
     print(user.uid);
 
-    return Consumer<dataService>(builder: (context, service, child) {
-      if (best10_card_num <= recommendRequest.length)
+    return Consumer<dataService_request>(builder: (context, service, child) {
+      if (best10_card_num <= sellingData.length)
         best10_card_num = best10_card_num;
       else
-        best10_card_num = recommendRequest.length;
+        best10_card_num = sellingData.length;
 
       if (popular_data_num <= sellingData.length)
         popular_data_num = popular_data_num;
@@ -276,9 +200,10 @@ class _mainpage_widgetState extends State<mainpage_widget> {
           centerTitle: true,
         ),
         body: FutureBuilder<QuerySnapshot>(
-            future: service.read(user.uid),
+            future: service.read(),
             builder: (context, snapshot) {
               final docs = snapshot.data?.docs ?? [];
+              print(docs.length);
               return ListView(
                 children: [
                   /////////////////////////////////광고페이지 /////////////////////////////////////////
@@ -327,241 +252,6 @@ class _mainpage_widgetState extends State<mainpage_widget> {
                   ),
                   SizedBox(
                     height: 15,
-                  ),
-
-                  /////////////////////////////////////////테스트 페이지 /////////////////////////////////////////
-
-                  Container(
-                    color: Colors.amber,
-                    height: 200,
-                    child: FutureBuilder<QuerySnapshot>(
-                      future: service.read(user.uid),
-                      builder: (context, snapshot) {
-                        final docs = snapshot.data?.docs ?? [];
-                        print('test');
-                        print(docs.length);
-                        return ListView.builder(
-                          scrollDirection: Axis.horizontal, // 횡스크롤
-                          itemCount: docs.length,
-                          itemBuilder: (context, index) {
-                            final request = docs[index];
-                            final category = request["category"] ?? "RAW";
-                            final condition_info =
-                                request["condition_info"] ?? "모집이름";
-                            final condition_title =
-                                request["condition_title"] ?? "모집이름";
-                            final due_date = request["due_date"] ?? "0";
-                            final start_date = request["start_date"] ?? "0";
-                            final file_info = request["file_info"] ?? "모집이름";
-                            final file_quantity =
-                                request["file_quantity"] ?? "모집이름";
-                            final file_type = request["file_type"] ?? "모집이름";
-                            final photo = request["photo"] ?? "0";
-                            final request_info =
-                                request["request_info"] ?? "RAW";
-                            final reward = request["reward"] ?? "모집이름";
-                            final title = request["title"] ?? "0";
-                            final uid = request["uid"] ?? "0";
-
-                            return Container(
-                              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                              height: 2,
-                              width: 280,
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    flex: 5,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.withOpacity(0.4),
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(5),
-                                            topRight: Radius.circular(5)),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: Container(
-                                              margin: EdgeInsets.all(5),
-                                              alignment: Alignment.center,
-                                              height: 25,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                  color: Colors.blueGrey),
-                                              child: Text(
-                                                category,
-                                                style: TextStyle(
-                                                    fontSize: 17,
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 3,
-                                            child: Container(
-                                              margin: EdgeInsets.all(5),
-                                              height: 25,
-                                              child: Text(
-                                                title,
-                                                style: TextStyle(
-                                                    fontSize: 17,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 5,
-                                    child: Container(
-                                      color: Colors.grey,
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              margin: EdgeInsets.all(5),
-                                              height: 25,
-                                              child: Text(
-                                                "Reward",
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 3,
-                                            child: Container(
-                                              alignment: Alignment.centerRight,
-                                              padding: EdgeInsets.fromLTRB(
-                                                  0, 0, 10, 0),
-                                              margin: EdgeInsets.all(5),
-                                              height: 25,
-                                              child: Text(
-                                                reward,
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 7,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.withOpacity(0.4),
-                                        borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(5),
-                                            bottomRight: Radius.circular(5)),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              margin: EdgeInsets.all(5),
-                                              height: 25,
-                                              child: Text(
-                                                "남은기간",
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              margin: EdgeInsets.all(5),
-                                              height: 25,
-                                              child: Text(
-                                                "left",
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.black),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 2,
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        detail_page(),
-                                                  ),
-                                                );
-                                              },
-                                              child: Container(
-                                                margin: EdgeInsets.all(10),
-                                                alignment: Alignment.center,
-                                                height: 40,
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20),
-                                                    color: Colors.black),
-                                                child: Text(
-                                                  "참가하기",
-                                                  style: TextStyle(
-                                                      fontSize: 17,
-                                                      color: Colors.white),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                  Container(
-                    height: 100,
-                    color: Colors.red,
-                    width: 100,
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => sellingPage()));
-                          },
-                          child: Container(
-                            color: Colors.yellow,
-                            height: 100,
-                            width: 50,
-                            child: Text("selling"),
-                          ),
-                        )
-                      ],
-                    ),
                   ),
 
                   /////////////////////////////////가장 인기있는 데이터 모음 /////////////////////////////////////////
@@ -900,214 +590,6 @@ class _mainpage_widgetState extends State<mainpage_widget> {
                     "리워드 BEST10",
                     "참여 보상이 높은 상위 10개의 공고를 확인해보세요!",
                   ),
-                  Container(
-                    color: Colors.amber,
-                    height: 200,
-                    child: FutureBuilder<QuerySnapshot>(
-                      future: service.read(user.uid),
-                      builder: (context, snapshot) {
-                        final docs = snapshot.data?.docs ?? [];
-
-                        return ListView.builder(
-                          scrollDirection: Axis.horizontal, // 횡스크롤
-                          itemCount: docs.length,
-                          itemBuilder: (context, index) {
-                            final request = docs[index];
-                            final category = request["category"] ?? "RAW";
-                            final condition_info =
-                                request["condition_info"] ?? "모집이름";
-                            final condition_title =
-                                request["condition_title"] ?? "모집이름";
-                            final due_date = request["due_date"] ?? "0";
-                            final start_date = request["start_date"] ?? "0";
-                            final file_info = request["file_info"] ?? "모집이름";
-                            final file_quantity =
-                                request["file_quantity"] ?? "모집이름";
-                            final file_type = request["file_type"] ?? "모집이름";
-                            final photo = request["photo"] ?? "0";
-                            final request_info =
-                                request["request_info"] ?? "RAW";
-                            final reward = request["reward"] ?? "모집이름";
-                            final title = request["title"] ?? "0";
-                            final uid = request["uid"] ?? "0";
-
-                            return Container(
-                              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                              height: 2,
-                              width: 280,
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    flex: 5,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.withOpacity(0.4),
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(5),
-                                            topRight: Radius.circular(5)),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: Container(
-                                              margin: EdgeInsets.all(5),
-                                              alignment: Alignment.center,
-                                              height: 25,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                  color: Colors.blueGrey),
-                                              child: Text(
-                                                category,
-                                                style: TextStyle(
-                                                    fontSize: 17,
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 3,
-                                            child: Container(
-                                              margin: EdgeInsets.all(5),
-                                              height: 25,
-                                              child: Text(
-                                                title,
-                                                style: TextStyle(
-                                                    fontSize: 17,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 5,
-                                    child: Container(
-                                      color: Colors.grey,
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              margin: EdgeInsets.all(5),
-                                              height: 25,
-                                              child: Text(
-                                                "Reward",
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 3,
-                                            child: Container(
-                                              alignment: Alignment.centerRight,
-                                              padding: EdgeInsets.fromLTRB(
-                                                  0, 0, 10, 0),
-                                              margin: EdgeInsets.all(5),
-                                              height: 25,
-                                              child: Text(
-                                                reward,
-                                                style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 7,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.withOpacity(0.4),
-                                        borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(5),
-                                            bottomRight: Radius.circular(5)),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              margin: EdgeInsets.all(5),
-                                              height: 25,
-                                              child: Text(
-                                                "남은기간",
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              margin: EdgeInsets.all(5),
-                                              height: 25,
-                                              child: Text(
-                                                "left",
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.black),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 2,
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        detail_page(),
-                                                  ),
-                                                );
-                                              },
-                                              child: Container(
-                                                margin: EdgeInsets.all(10),
-                                                alignment: Alignment.center,
-                                                height: 40,
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20),
-                                                    color: Colors.black),
-                                                child: Text(
-                                                  "참가하기",
-                                                  style: TextStyle(
-                                                      fontSize: 17,
-                                                      color: Colors.white),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ),
 
                   for (var i = 0; i < best10_card_num; i++)
                     GestureDetector(
@@ -1385,6 +867,8 @@ class _mainpage_widgetState extends State<mainpage_widget> {
                   GestureDetector(
                     onTap: () {
                       best10_card_num += 2;
+                      if (best10_card_num > docs.length)
+                        best10_card_num = docs.length;
                       setState(() {});
                     },
                     child: Container(
