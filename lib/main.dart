@@ -6,12 +6,17 @@ import 'onboarding.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth_service.dart';
+
+late SharedPreferences prefs;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // main 함수에서 async 사용하기 위함
   await Firebase.initializeApp(); // firebase 앱 시작
+  prefs = await SharedPreferences.getInstance();
   runApp(
     MultiProvider(
       providers: [
@@ -42,15 +47,18 @@ class app_start extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isOnboarded = prefs.getBool("isOnboarded") ?? false;
     final user = context.read<AuthService>().currentUser();
     return FutureBuilder(
-      future: Future.delayed(Duration(seconds: 3)),
+      future: Future.delayed(Duration(seconds: 1)),
       builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return MaterialApp(home: Splash());
         } else {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
+            theme: ThemeData(textTheme: GoogleFonts.getTextTheme('Jua')),
+            //home: isOnboarded ? main_page() : onboarding_page(),
             home: user == null ? login_page() : main_page(),
           );
         }

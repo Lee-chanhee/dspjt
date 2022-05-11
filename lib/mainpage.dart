@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dataservice.dart';
 import 'detail_page.dart';
 import 'login.dart';
+import 'mypage.dart';
 import 'purchase.dart';
 import 'request_form.dart';
 import 'selling.dart';
@@ -41,7 +42,7 @@ class _main_pageState extends State<main_page> with TickerProviderStateMixin {
       mainpage_widget(controller: controller),
       purchasePage(),
       RequestForm(),
-      purchasePage(),
+      mypage(),
     ];
 
     return Consumer<dataService_request>(
